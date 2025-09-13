@@ -31,7 +31,6 @@ function connect(event) {
     event.preventDefault();
 }
 
-
 function onConnected() {
     // Subscribe to the Public Topic
     stompClient.subscribe('/topic/public', onMessageReceived);
@@ -45,12 +44,10 @@ function onConnected() {
     connectingElement.classList.add('hidden');
 }
 
-
 function onError(error) {
     connectingElement.textContent = 'Could not connect to WebSocket server. Please refresh this page to try again!';
     connectingElement.style.color = 'red';
 }
-
 
 function sendMessage(event) {
     var messageContent = messageInput.value.trim();
@@ -66,7 +63,6 @@ function sendMessage(event) {
     event.preventDefault();
 }
 
-
 function onMessageReceived(payload) {
     var message = JSON.parse(payload.body);
 
@@ -81,6 +77,11 @@ function onMessageReceived(payload) {
     } else {
         messageElement.classList.add('chat-message');
 
+        // Ajouter la classe own-message si c'est le message de l'utilisateur actuel
+        if(message.sender === username) {
+            messageElement.classList.add('own-message');
+        }
+
         var avatarElement = document.createElement('i');
         var avatarText = document.createTextNode(message.sender[0]);
         avatarElement.appendChild(avatarText);
@@ -88,10 +89,11 @@ function onMessageReceived(payload) {
 
         messageElement.appendChild(avatarElement);
 
-        var usernameElement = document.createElement('span');
-        var usernameText = document.createTextNode(message.sender);
-        usernameElement.appendChild(usernameText);
-        messageElement.appendChild(usernameElement);
+        // SUPPRIMÉ: La partie qui ajoute le nom d'utilisateur à côté du message
+        // var usernameElement = document.createElement('span');
+        // var usernameText = document.createTextNode(message.sender);
+        // usernameElement.appendChild(usernameText);
+        // messageElement.appendChild(usernameElement);
     }
 
     var textElement = document.createElement('p');
@@ -103,7 +105,6 @@ function onMessageReceived(payload) {
     messageArea.appendChild(messageElement);
     messageArea.scrollTop = messageArea.scrollHeight;
 }
-
 
 function getAvatarColor(messageSender) {
     var hash = 0;
